@@ -73,7 +73,7 @@ export const geminiAdapter: AIProviderAdapter = {
 
     const modelId = resolveEffectiveModelId(settings);
     const baseUrl = resolveEffectiveBaseUrl(settings);
-    const url = `${baseUrl}/models/${encodeURIComponent(modelId)}:streamGenerateContent?alt=sse&key=${encodeURIComponent(apiKey)}`;
+    const url = `${baseUrl}/models/${encodeURIComponent(modelId)}:streamGenerateContent?alt=sse`;
 
     const systemMessages = messages
       .filter((m) => m.role === 'system')
@@ -105,6 +105,7 @@ export const geminiAdapter: AIProviderAdapter = {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'x-goog-api-key': apiKey,
         },
         body: JSON.stringify(body),
         signal,
@@ -158,7 +159,7 @@ export const geminiAdapter: AIProviderAdapter = {
 
     const modelId = resolveEffectiveModelId(settings);
     const baseUrl = resolveEffectiveBaseUrl(settings);
-    const url = `${baseUrl}/models/${encodeURIComponent(modelId)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+    const url = `${baseUrl}/models/${encodeURIComponent(modelId)}:generateContent`;
     const startTime = performance.now();
 
     try {
@@ -166,6 +167,7 @@ export const geminiAdapter: AIProviderAdapter = {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'x-goog-api-key': apiKey,
         },
         body: JSON.stringify({
           contents: [{ role: 'user', parts: [{ text: 'Reply with OK.' }] }],

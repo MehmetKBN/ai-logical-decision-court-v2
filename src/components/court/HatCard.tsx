@@ -5,15 +5,19 @@ import {
   FileText,
   Flame,
   Loader2,
+  RotateCw,
   Scale,
   ShieldAlert,
+  Sparkles,
   Sprout,
   Sun,
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { HATS } from '../../config/hats';
+import { retryFromHat } from '../../services/ai/orchestrator';
 import { useCourtStore } from '../../store/useCourtStore';
+import { useSettingsStore } from '../../store/useSettingsStore';
 import type { HatIconName, HatId, HatStatus } from '../../types/court';
 
 export interface HatCardProps {
@@ -97,6 +101,7 @@ export function HatCard({ hatId }: HatCardProps) {
   const hat = HATS[hatId];
   const response = useCourtStore((s) => s.responses[hatId]);
   const activeHatId = useCourtStore((s) => s.activeHatId);
+  const demoMode = useSettingsStore((s) => s.demoMode);
 
   const isActive =
     activeHatId === hatId ||
@@ -216,6 +221,16 @@ export function HatCard({ hatId }: HatCardProps) {
               {response.errorMessage ??
                 'An unexpected provider error occurred during this turn.'}
             </p>
+            <div className="mt-3">
+              <button
+                type="button"
+                onClick={() => void retryFromHat(hatId)}
+                className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-red-400/40 bg-red-900/50 px-3 py-1.5 text-xs font-semibold text-red-100 transition-colors hover:bg-red-800/60"
+              >
+                <RotateCw className="h-3.5 w-3.5" />
+                <span>Retry from here</span>
+              </button>
+            </div>
           </div>
         )}
 
@@ -223,16 +238,26 @@ export function HatCard({ hatId }: HatCardProps) {
           response.status === 'completed' ||
           response.status === 'aborted') &&
           response.content.length > 0 && (
-            <div className="court-markdown max-h-[420px] overflow-y-auto pr-1">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {response.content}
-              </ReactMarkdown>
-              {response.status === 'streaming' && (
-                <span
-                  aria-hidden="true"
-                  className={`ml-1 inline-block h-4 w-2 translate-y-0.5 animate-pulse rounded-xs ${theme.cursorColor}`}
-                />
+            <div>
+              {demoMode && (
+                <div className="mb-2.5 flex items-center">
+                  <span className="inline-flex items-center gap-1 rounded-md border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 font-mono text-[10px] font-medium text-emerald-300">
+                    <Sparkles className="h-2.5 w-2.5" />
+                    Simulated Demo Output
+                  </span>
+                </div>
               )}
+              <div className="court-markdown max-h-[420px] overflow-y-auto pr-1">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {response.content}
+                </ReactMarkdown>
+                {response.status === 'streaming' && (
+                  <span
+                    aria-hidden="true"
+                    className={`ml-1 inline-block h-4 w-2 translate-y-0.5 animate-pulse rounded-xs ${theme.cursorColor}`}
+                  />
+                )}
+              </div>
             </div>
           )}
 

@@ -6,12 +6,12 @@ import type {
 } from '../../types/provider';
 
 function detectHatFromSystemPrompt(systemPrompt: string): HatId {
-  const upper = systemPrompt.toUpperCase();
-  if (upper.includes('WHITE HAT')) return 'white';
-  if (upper.includes('RED HAT')) return 'red';
-  if (upper.includes('YELLOW HAT')) return 'yellow';
-  if (upper.includes('BLACK HAT')) return 'black';
-  if (upper.includes('GREEN HAT')) return 'green';
+  const firstLine = systemPrompt.split('\n')[0]?.toUpperCase() ?? '';
+  if (firstLine.includes('YOU ARE THE WHITE HAT')) return 'white';
+  if (firstLine.includes('YOU ARE THE RED HAT')) return 'red';
+  if (firstLine.includes('YOU ARE THE YELLOW HAT')) return 'yellow';
+  if (firstLine.includes('YOU ARE THE BLACK HAT')) return 'black';
+  if (firstLine.includes('YOU ARE THE GREEN HAT')) return 'green';
   return 'blue';
 }
 

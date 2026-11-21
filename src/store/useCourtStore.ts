@@ -25,6 +25,7 @@ export interface CourtStoreState extends CourtSession {
   setCasePrompt: (casePrompt: string) => void;
   setContextConstraints: (contextConstraints: string) => void;
   startSession: () => void;
+  prepareRetryFromHat: (startHatId: HatId) => void;
   setActiveHat: (hatId: HatId | null) => void;
   appendHatToken: (hatId: HatId, chunk: string) => void;
   setHatStatus: (
@@ -57,6 +58,28 @@ export const useCourtStore = create<CourtStoreState>((set) => ({
       status: 'running',
       activeHatId: 'white',
       responses: createInitialResponses(),
+    });
+  },
+
+  prepareRetryFromHat: (startHatId) => {
+    set((state) => {
+      const startIndex = DELIBERATION_ORDER.indexOf(startHatId);
+      const updatedResponses = { ...state.responses };
+
+      for (let i = startIndex; i < DELIBERATION_ORDER.length; i += 1) {
+        const hatId = DELIBERATION_ORDER[i];
+        updatedResponses[hatId] = {
+          hatId,
+          status: 'idle',
+          content: '',
+        };
+      }
+
+      return {
+        status: 'running',
+        activeHatId: startHatId,
+        responses: updatedResponses,
+      };
     });
   },
 

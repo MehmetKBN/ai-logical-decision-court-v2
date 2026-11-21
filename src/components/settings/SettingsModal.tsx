@@ -301,8 +301,8 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                 <div className="flex items-center gap-2 rounded-lg border border-emerald-500/20 bg-emerald-950/20 px-3 py-2 text-[11px] text-emerald-300/90">
                   <ShieldCheck className="h-4 w-4 shrink-0 text-emerald-400" />
                   <span>
-                    Stored locally in your browser only — never sent to any
-                    backend server.
+                    Zero Backend • Stored locally in your browser and sent
+                    directly to your chosen AI provider — never to our servers.
                   </span>
                 </div>
               </div>
@@ -456,6 +456,10 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                       http://localhost:11434/v1
                     </code>
                     ).
+                  </p>
+                  <p className="text-[11px] font-medium text-amber-300/90">
+                    Security Note: Only enter endpoints you trust — your API key
+                    will be sent directly to this URL.
                   </p>
                 </div>
               )}

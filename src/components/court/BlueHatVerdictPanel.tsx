@@ -4,13 +4,16 @@ import {
   CheckCircle2,
   Gavel,
   Loader2,
+  RotateCw,
   Scale,
   Sparkles,
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { COUNCIL_HATS, HATS } from '../../config/hats';
+import { retryFromHat } from '../../services/ai/orchestrator';
 import { useCourtStore } from '../../store/useCourtStore';
+import { useSettingsStore } from '../../store/useSettingsStore';
 import { ExportTranscriptButton } from '../export/ExportTranscriptButton';
 
 export function BlueHatVerdictPanel() {
@@ -18,6 +21,7 @@ export function BlueHatVerdictPanel() {
   const responses = useCourtStore((s) => s.responses);
   const activeHatId = useCourtStore((s) => s.activeHatId);
   const sessionStatus = useCourtStore((s) => s.status);
+  const demoMode = useSettingsStore((s) => s.demoMode);
 
   const blueResponse = responses.blue;
   const completedCouncilCount = COUNCIL_HATS.filter(
@@ -187,6 +191,16 @@ export function BlueHatVerdictPanel() {
               <span>Head Judge Deliberation Interrupted</span>
             </div>
             <p>{blueResponse.errorMessage}</p>
+            <div className="mt-3">
+              <button
+                type="button"
+                onClick={() => void retryFromHat('blue')}
+                className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-red-400/40 bg-red-900/50 px-3 py-1.5 text-xs font-semibold text-red-100 transition-colors hover:bg-red-800/60"
+              >
+                <RotateCw className="h-3.5 w-3.5" />
+                <span>Retry from here</span>
+              </button>
+            </div>
           </div>
         )}
 
@@ -199,9 +213,17 @@ export function BlueHatVerdictPanel() {
               animate={{ opacity: 1 }}
               className="rounded-xl border border-blue-500/20 bg-slate-950/65 p-5 sm:p-6"
             >
-              <div className="mb-3 flex items-center gap-1.5 font-mono text-[11px] font-semibold uppercase tracking-wider text-blue-300">
-                <Sparkles className="h-3.5 w-3.5" />
-                <span>Official Judicial Synthesis &amp; Ruling</span>
+              <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-center gap-1.5 font-mono text-[11px] font-semibold uppercase tracking-wider text-blue-300">
+                  <Sparkles className="h-3.5 w-3.5" />
+                  <span>Official Judicial Synthesis &amp; Ruling</span>
+                </div>
+                {demoMode && (
+                  <span className="inline-flex items-center gap-1 rounded-md border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 font-mono text-[10px] font-medium text-emerald-300">
+                    <Sparkles className="h-2.5 w-2.5" />
+                    Simulated Demo Output
+                  </span>
+                )}
               </div>
               <div className="court-markdown">
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>

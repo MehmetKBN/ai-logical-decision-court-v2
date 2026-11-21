@@ -113,8 +113,8 @@ export function App() {
           <div className="flex items-center gap-2">
             <ShieldCheck className="h-4 w-4 text-emerald-500/80" />
             <span>
-              100% Client-Side Privacy • Zero Backend • API keys never leave
-              your browser
+              Zero Backend • Stored locally in your browser and sent directly to
+              your chosen AI provider — never to our servers
             </span>
           </div>
           <span className="font-mono text-[11px] text-slate-600">

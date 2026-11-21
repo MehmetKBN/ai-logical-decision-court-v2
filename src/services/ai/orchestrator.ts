@@ -20,14 +20,10 @@ function buildHatUserPrompt(
   completedTranscripts: Array<{ hatId: HatId; content: string }>,
 ): string {
   const currentHat = HATS[currentHatId];
-  const sections: string[] = [
-    `CASE DILEMMA:\n${casePrompt.trim()}`,
-  ];
+  const sections: string[] = [`CASE DILEMMA:\n${casePrompt.trim()}`];
 
   if (contextConstraints.trim().length > 0) {
-    sections.push(
-      `CONTEXT & CONSTRAINTS:\n${contextConstraints.trim()}`,
-    );
+    sections.push(`CONTEXT & CONSTRAINTS:\n${contextConstraints.trim()}`);
   }
 
   if (completedTranscripts.length > 0) {
@@ -65,11 +61,11 @@ export function abortCourtSession(): void {
 }
 
 /**
- * Executes the sequential 5+1 Decision Court session:
- * White Hat -> Red Hat -> Yellow Hat -> Black Hat -> Green Hat -> Blue Hat (Head Judge).
+ * Core sequential execution engine that runs from `startHatId` through `blue`.
+ * When `startHatId` is not `'white'`, all already-completed hats preceding `startHatId`
+ * are preserved and included in the Prior Council Transcript.
  */
-export async function runCourtSession(): Promise<void> {
-  // Abort any previous in-flight session first
+async function executeCourtPipeline(startHatId: HatId): Promise<void> {
   if (activeAbortController) {
     activeAbortController.abort();
     activeAbortController = null;
@@ -83,7 +79,7 @@ export async function runCourtSession(): Promise<void> {
 
   if (!casePrompt) {
     courtState.setHatStatus(
-      'white',
+      startHatId,
       'error',
       'Please enter a decision or dilemma before convening the court.',
     );
@@ -91,26 +87,49 @@ export async function runCourtSession(): Promise<void> {
   }
 
   if (!settingsState.isConfigured()) {
-    courtState.startSession();
+    if (startHatId === 'white') {
+      courtState.startSession();
+    } else {
+      courtState.prepareRetryFromHat(startHatId);
+    }
     courtState.setHatStatus(
-      'white',
+      startHatId,
       'error',
       'No API key configured. Please open Settings to enter your API key or enable Demo Mode.',
     );
     return;
   }
 
+  const startIndex = DELIBERATION_ORDER.indexOf(startHatId);
+  const completedTranscripts: Array<{ hatId: HatId; content: string }> = [];
+
+  if (startIndex === 0) {
+    courtState.startSession();
+  } else {
+    // Collect already-completed transcripts from turns prior to startHatId
+    const existingResponses = courtState.responses;
+    for (let i = 0; i < startIndex; i += 1) {
+      const priorHatId = DELIBERATION_ORDER[i];
+      const priorContent = existingResponses[priorHatId].content.trim();
+      if (priorContent.length > 0) {
+        completedTranscripts.push({
+          hatId: priorHatId,
+          content: priorContent,
+        });
+      }
+    }
+    courtState.prepareRetryFromHat(startHatId);
+  }
+
   const controller = new AbortController();
   activeAbortController = controller;
   const { signal } = controller;
 
-  const adapter = getProviderAdapter(settingsState);
-  const completedTranscripts: Array<{ hatId: HatId; content: string }> = [];
-
-  courtState.startSession();
+  const adapter = getProviderAdapter(useSettingsStore.getState());
+  const hatsToRun = DELIBERATION_ORDER.slice(startIndex);
 
   try {
-    for (const hatId of DELIBERATION_ORDER) {
+    for (const hatId of hatsToRun) {
       if (signal.aborted) {
         useCourtStore.getState().abortSession();
         return;
@@ -192,7 +211,7 @@ export async function runCourtSession(): Promise<void> {
       return;
     }
 
-    const activeHat = useCourtStore.getState().activeHatId ?? 'white';
+    const activeHat = useCourtStore.getState().activeHatId ?? startHatId;
     const message =
       error instanceof Error
         ? error.message
@@ -204,4 +223,19 @@ export async function runCourtSession(): Promise<void> {
       activeAbortController = null;
     }
   }
+}
+
+/**
+ * Executes a full sequential 5+1 Decision Court session starting from Turn #1 (White Hat).
+ */
+export async function runCourtSession(): Promise<void> {
+  await executeCourtPipeline('white');
+}
+
+/**
+ * Resumes/retries a court session starting from `hatId`, preserving all earlier
+ * completed council statements in `useCourtStore` and feeding them as context.
+ */
+export async function retryFromHat(hatId: HatId): Promise<void> {
+  await executeCourtPipeline(hatId);
 }

@@ -49,7 +49,8 @@ Asking a single LLM *"Should I make this move?"* almost always produces a lukewa
 - **🔗 Sequential Context Accumulation:** Each subsequent hat receives the original case prompt, constraints, and the verbatim statements of all preceding hats—enabling genuine cross-hat synthesis.
 - **⚡ Real-Time SSE Token Streaming & Instant Abort:** Watch every hat deliberate live token-by-token with Framer Motion spotlighting, elapsed turn timers, and mid-stream cancellation via `AbortController`.
 - **🔒 Privacy-First BYOK (Bring Your Own Key):**
-  - **Zero Backend:** API keys are stored exclusively in your browser (`localStorage` or ephemeral tab-only `sessionStorage`) and sent directly to the provider's official REST endpoint.
+  - **Zero Backend:** Stored locally in your browser (`localStorage` or ephemeral tab-only `sessionStorage`) and sent directly to your chosen AI provider — never to our servers.
+  - **Header-Only Credential Transport:** API keys are sent via HTTP headers (`x-goog-api-key`, `Authorization: Bearer`, `x-api-key`) and never exposed in URL query strings.
   - **Multi-Provider Native Support:** Google Gemini (`gemini-4-hydrogen`, `gemini-2.5-pro`, `gemini-2.5-flash`), OpenAI (`gpt-4.1`, `gpt-4o`, `o3-mini`), Anthropic (`claude-3-7-sonnet-latest`, `claude-3-5-haiku-latest`), and **OpenRouter / Custom OpenAI-Compatible Endpoints** (Groq, Together AI, LM Studio, or local **Ollama** at `http://localhost:11434/v1`).
   - **Future-Proof Custom Model ID & Connection Tester:** Override any preset with an arbitrary model ID and verify latency with a single click.
 - **🎭 Built-In Demo Mode (Zero Key Required):** Visitors can test the complete animated 6-hat deliberation and verdict flow immediately without entering an API key.
@@ -143,9 +144,12 @@ npm install
 npm run dev
 ```
 
-### Production Build & Lint Verification
+### Production Build, Unit Tests & Lint Verification
 
 ```bash
+# Run automated Vitest unit tests (SSE stream parser, error normalizer, 6-hat orchestrator)
+npm test
+
 # Type-check with strict TypeScript and build production assets to dist/
 npm run build
 
