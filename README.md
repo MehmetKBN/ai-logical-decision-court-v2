@@ -13,13 +13,13 @@
 
 ## 🌐 Live Demo & Preview
 
-- **Live Application:** **[`[Live Demo URL]`](https://your-deployment-url.vercel.app)** *(Zero API key required — toggle **Demo Mode** in the top header for an instant interactive simulation!)*
+- **Live Application:** **[`[Live Demo URL]`](https://aildc.mehmetkaban.tr)** *(Zero API key required — toggle **Demo Mode** in the top header for an instant interactive simulation!)*
 
 ### Courtroom Interface Preview
 
 > _Replace the placeholder below with a screenshot or screen-recording GIF of your live 5+1 court session:_
 >
-> `![AI Logical Decision Court v2 Screenshot](./docs/screenshot-placeholder.png)`
+> `![AI Logical Decision Court v2 Screenshot](./docs/screenshot.png)`
 
 ---
 
