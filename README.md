@@ -6,20 +6,18 @@
 [![TypeScript 5.7](https://img.shields.io/badge/TypeScript-Strict-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Vite 6](https://img.shields.io/badge/Vite-6-646CFF?logo=vite&logoColor=white)](https://vite.dev/)
 [![Tailwind CSS v4](https://img.shields.io/badge/Tailwind_CSS-v4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-[![Privacy: 100% Client-Side BYOK](https://img.shields.io/badge/Privacy-100%25_Client--Side_BYOK-22C55E)](#privacy-first-byok-architecture)
+[![Privacy: 100% Client-Side BYOK](https://img.shields.io/badge/Privacy-100%25_Client--Side_BYOK-22C55E)](#-key-features)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 
 ---
 
 ## 🌐 Live Demo & Preview
 
-- **Live Application:** **[`[Live Demo URL]`](https://aildc.mehmetkaban.tr)** *(Zero API key required — toggle **Demo Mode** in the top header for an instant interactive simulation!)*
+- **Live Application:** **[aildc.mehmetkaban.tr](https://aildc.mehmetkaban.tr)** *(Zero API key required — toggle **Demo Mode** in the top header for an instant interactive simulation!)*
 
 ### Courtroom Interface Preview
 
-> _Replace the placeholder below with a screenshot or screen-recording GIF of your live 5+1 court session:_
->
-> `![AI Logical Decision Court v2 Screenshot](./docs/screenshot.png)`
+![AI Logical Decision Court v2 Screenshot](./docs/screenshot.png)
 
 ---
 
