@@ -12,8 +12,8 @@ Thank you for your interest in contributing to **AI Logical Decision Court v2**!
 
 ### Fork, Clone & Run
 ```bash
-# 1. Fork the repository on GitHub, then clone your fork:
-git clone https://github.com/YOUR_USERNAME/ai-logical-decision-court-v2.git
+# 1. Fork the repository on GitHub (https://github.com/MehmetKBN/ai-logical-decision-court-v2), then clone:
+git clone https://github.com/MehmetKBN/ai-logical-decision-court-v2.git
 cd ai-logical-decision-court-v2
 
 # 2. Install dependencies:

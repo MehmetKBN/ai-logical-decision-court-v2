@@ -1,7 +1,14 @@
 {
   "name": "ai-logical-decision-court-v2",
+  "description": "Privacy-first, client-side 5+1 AI Decision Court built on Edward De Bono's Six Thinking Hats methodology with multi-provider BYOK streaming.",
   "private": true,
   "version": "2.0.0",
+  "license": "MIT",
+  "homepage": "https://aildc.mehmetkaban.tr",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MehmetKBN/ai-logical-decision-court-v2.git"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",
